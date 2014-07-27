@@ -1,0 +1,42 @@
+package consent.datacontroller;
+
+import java.security.GeneralSecurityException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
+import xdi2.core.features.keys.Keys;
+import xdi2.core.xri3.CloudName;
+import xdi2.core.xri3.CloudNumber;
+
+public class AmazonRespectDataController implements DataController {
+
+	@Override
+	public CloudName getCloudName() {
+
+		return CloudName.create("+amazon.respect");
+	}
+
+	@Override
+	public CloudNumber getCloudNumber() {
+
+		return CloudNumber.create("[+]!:uuid:66a826d7-9055-4415-9ed2-419d5e89ba8c");
+	}
+
+	@Override
+	public String getXdiEndpointUri() {
+
+		return "http://xdi03-at.danubeclouds.com/cl/%5B%2B%5D!:uuid:66a826d7-9055-4415-9ed2-419d5e89ba8c";
+	}
+
+	@Override
+	public PrivateKey getPrivateKey() throws GeneralSecurityException {
+		
+		return Keys.privateKeyFromPrivateKeyString("MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDNaK88qbtEU4dK8hnJC0+gzBm/kFITTAjtFb5t/PylvxxNgYkQczKYNCzhSXeVInAHZaNp88e2VUKDP0Oko5PXuR3k2tr4PClzA95YqB1Z7OTy5YnYvZcV5njUu//PupAy1kkl/q02NvIIPb2tZdOB2mNtVf160JLoFcfCDoyNp7no2Xkec345VnajJj38NBHFdy+RR25zQDpTVttz52+CiYHfKS5TibBOMNuYaX5hrx24dDxAiOmIxcSIA4LwMZSDduyN1C+iBsjSHbbk9S4f61s+AHA1hDRXdipLYu2+odqI5N6iwdba4UI+Ieg6s6GvrkYV1oJpLGQ4VVbPXqofAgMBAAECggEBAIalqLlLScZwOq+WI/D1ySzOndJE+IhNv0wqhLn0rGi57gOgdgiievfqu8CyOAE6odU3evdpJfEP0pnWTrENyUwPvNjX3dH7HfCXCJl1GkhoUWwnq0S4guGIQoyw7+9rjDrG3Qxa9ZAkVGOylTOlHBBy59o0FAT91E7ueBNtFhWEP/W6RyMTvOz5577czkEJlrTNWrEMnZZQTHggAlVba9u7cczqvC9280fz5lazptt67SsqK5WJqiKx6ZtdZxbzq7jCGcQTyeO5u8mMfkHu7oYY57fdBpAAjeoi7HO1rr82XEoD4CieCuS8CP6ZN/p0a7qwtRagpfcSCKF1OXi3VQECgYEA8g8xN5LWbLLR0vS1XU+//aRosSgv0D4ZRu/njXoW9qHt0hXA9lXzvPPXENyEJdiZhEnZD96IezeeYgm0Bp1LyHGmrgY/cxhrzsbAIkIegKbTwsqwTzZaNS7WDtu2ZtO/tZL1DxCJNTx0vT6NLQ+neE31VAD4Em4nGDN5ypSPs9kCgYEA2T0iyttyi3eCId2DlRQL0ikKlnJkeUq2bXl6+DqpeBJuCAajkGjUYof6XL0TaWqoqhS/dZvwmw4mdA2STrkjX68lFfislbAB86MCYn6HcZETIJkKiWqrlRJnuCSgBbJQS0l1Ix0mHRLMWrKHiM3q2X0DH/5twrGOyRcUyOGPqrcCgYEA5zU5trKMHCGmKBFT10Bgy56p3WXcXdWjAU4P5+QRYR0E86GRwfoRqY9kAxgPJbNB18lOC0ltJfzXTR+llJfUli5wnlMbcg2GlGjlhxOO3SX8qVg/ljn9akVFc8XL8WYa/Q3VA8GwvWf0vfqskLkeJtyYE9glHD2ZHBW3JJhItukCgYBI9FAP4hyYm7zXFKYQ1ZeWr3O/zJDTbvTO1QIoBMNO8JmFFn2tjJbutA2vQUwYldoorCkUHRdzaxAc30XoLCKmCpKgy09iQaaWJIMzgpyH1hmfU+YG+gy/VlwAqkQXRafTcMrmzO40y1BXkScVGVoqSeJXx0EjJi/2dkrjn2R5BwKBgQDFmB3GnZNc/wk1ejpL0F4Q+R1ceWxzj793KtWsC2tEPv5y1A+7SBnqPQQkSURCWUbYiAz2FSbaywJPL8+hdcHEK81ivAPPmKHXzqNTy5CMVbG4s4/Vu1iVONRClxS9okx7ZXDeBhrz2eRyi5xVS5B/I0DT8OUpFbp6aon+G6zFWQ==");
+	}
+
+	@Override
+	public PublicKey getPublicKey() throws GeneralSecurityException {
+		
+		return Keys.publicKeyFromPublicKeyString("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzWivPKm7RFOHSvIZyQtPoMwZv5BSE0wI7RW+bfz8pb8cTYGJEHMymDQs4Ul3lSJwB2WjafPHtlVCgz9DpKOT17kd5Nra+DwpcwPeWKgdWezk8uWJ2L2XFeZ41Lv/z7qQMtZJJf6tNjbyCD29rWXTgdpjbVX9etCS6BXHwg6Mjae56Nl5HnN+OVZ2oyY9/DQRxXcvkUduc0A6U1bbc+dvgomB3ykuU4mwTjDbmGl+Ya8duHQ8QIjpiMXEiAOC8DGUg3bsjdQvogbI0h225PUuH+tbPgBwNYQ0V3YqS2LtvqHaiOTeosHW2uFCPiHoOrOhr65GFdaCaSxkOFVWz16qHwIDAQAB");
+	}
+}
