@@ -1,0 +1,100 @@
+<html style="width: 100%; height:100%; overflow-x: hidden;">
+
+<head>
+
+<link rel="stylesheet" href="css/style.css" TYPE="text/css" MEDIA="screen" />
+<link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
+<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="js/lodash.compat.min.js"></script>
+<script type="text/javascript" src="xdi.js"></script>
+
+<script type="text/javascript">
+
+function issueConsentReceipt() {
+	$.get("IssueConsentReceipt?dataSubject=[=]!:uuid:1111", function(data) {
+		$("#consentReceipt").text(data);
+	});
+}
+
+function findCloud() {
+	xdi.discovery(
+		$("#cloudName").val(),
+		function(discovery) {
+			$("#cloudNumber").text(discovery.cloudNumber());
+			$("#xdiEndpoint").text(discovery.xdiEndpoint());
+		},
+		function(errorText) {
+			alert(errorText);
+		}
+	);
+}
+
+function storeConsentReceipt() {
+
+	var graph = xdi.graph();
+	graph.deserializeXDIDISPLAY($("#consentReceipt").text());
+
+	var statements = graph.statements();
+
+	var message = xdi.message($("#cloudNumber").text());
+	message.toAddress("(" + $("#cloudNumber").text() + ")");
+	message.linkContract("(" + $("#cloudNumber").text() + "/" + $("#cloudNumber").text() + ")$do");
+	message.secretToken($("#secretToken").val());
+
+	for (i in statements) message.operation("$set", statements[i]);
+
+	$("#message").text(message.messageEnvelope().graph().serializeXDIDISPLAY());
+
+/*	message.send(
+
+		endpoint,
+		function(response) {
+			var statements = response.statements();
+			$("#clientresult").html("");
+			$("#clientresult").append("<p class='segment'>STATEMENTS: " + statements.length + "</p>");
+			for (var i in statements) $("#clientresult").append(_.escape(statements[i].string()) + "<br>");
+		},
+		function(errorText) {
+			alert(errorText);
+		}
+	);*/
+}
+
+</script>
+
+</head>
+
+<body style="width: 100%; height:100%; overflow-x: hidden;">
+
+<img src="img/RNLogo.png" style="float:right">
+<img src="img/on-logo.png">
+
+<br style="clear:both">
+
+<h2>Step 1:</h2>
+
+<a href="javascript:void(0);" onclick="issueConsentReceipt();">Issue Consent Receipt</a>
+<textarea id="consentReceipt" style="width:90%" rows="3"></textarea>
+
+<h2>Step 2:</h2>
+
+<p>Type your Respect Network Cloud Name:</p>
+<input type="text" id="cloudName" placeholder="=yourname">
+<button onclick="findCloud();">Find my Personal Cloud</button>
+
+<p><b>Your Cloud Number:</b> <span id="cloudNumber"></span></p>
+<p><b>Your Personal Cloud:</b> <span id="xdiEndpoint"></span></p>
+
+<h2>Step 3:</h2>
+
+<p>Store Consent Receipt in your Personal Cloud:</p>
+<input type="text" id="secretToken" placeholder="your secret token">
+<button onclick="storeConsentReceipt();">Store Consent Receipt</button>
+<textarea id="message" style="width:90%" rows="3"></textarea>
+
+</pre>
+
+</body>
+
+</html>
