@@ -1,7 +1,8 @@
-This is a fake Amazon website that stores a Consent Receipt in a Respect Network personal cloud.
+Demo where amazonrespect.com issues a MVCR within the Respect Network
 
 ### Information
 
+See https://kantarainitiative.org/confluence/x/dQkhB
 
 ### How to build
 
