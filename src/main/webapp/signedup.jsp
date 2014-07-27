@@ -26,7 +26,7 @@ $(document).ready(function() {
 
 	<img src="img/fakeamazon.png">
 
-	<h2>Thanks for signing up</h2>
+	<h2>Thanks <%= request.getAttribute("name") %> for signing up</h2>
 
   </body>
 
