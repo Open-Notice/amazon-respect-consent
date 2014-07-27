@@ -1,6 +1,8 @@
 <html>
 
 <head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="css/style.css" TYPE="text/css" MEDIA="screen" />
 <link rel="stylesheet" href="css/colorbox.css" TYPE="text/css" MEDIA="screen" />
 <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />

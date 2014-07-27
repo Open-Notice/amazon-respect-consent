@@ -5,6 +5,7 @@ import java.util.Date;
 
 import xdi2.core.ContextNode;
 import xdi2.core.Graph;
+import xdi2.core.features.equivalence.Equivalence;
 import xdi2.core.features.nodetypes.XdiAttributeCollection;
 import xdi2.core.features.nodetypes.XdiEntityCollection;
 import xdi2.core.features.nodetypes.XdiEntityMember;
@@ -39,40 +40,45 @@ public class ConsentReceipt {
 		this.contextNode = null;
 	}
 
-/*	public static ConsentReceipt fromXdi(ContextNode contextNode) {
-		
+	/*	public static ConsentReceipt fromXdi(ContextNode contextNode) {
+
 		XdiSubGraph<?> xdiSubGraph = XdiAbstractSubGraph.fromContextNode(contextNode);
-		
+
 		if (xdiSubGraph instanceof XdiEntitySingleton) {
-			
+
 			if (! XDI3Segment.create("#receipt").equals(contextNode.getArcXri())) return null;
 		} else if (xdiSubGraph instanceof XdiEntityMember) {
-			
+
 			if (! XDI3Segment.create("[#receipt]").equals(contextNode.getContextNode().getArcXri())) return null;
 		} else {
-			
+
 			return null;
 		}
 
 		ConsentReceipt consentReceipt = new ConsentReceipt();
 		consentReceipt.contextNode = contextNode;
-		
+
 		Literal locationDigitalLiteral = contextNode.getDeepLiteral(XDI3Segment.create("<#location><#digital>&"));
 		consentReceipt.locationDigital = locationDigitalLiteral == null ? null : locationDigitalLiteral.getLiteralDataBoolean();
-		
+
 		Literal locationUriLiteral = contextNode.getDeepLiteral(XDI3Segment.create("<#location><$uri>&"));
 		consentReceipt.locationDigital = locationDigitalLiteral == null ? null : locationDigitalLiteral.getLiteralDataBoolean();
 	}*/
-	
+
 	public ContextNode toXdi() {
 
 		if (this.contextNode != null) return this.contextNode;
 
 		Graph graph = MemoryGraphFactory.getInstance().openGraph();
 
+		XdiEntityCollection myReceiptsXdiEntityCollection = XdiLocalRoot.findLocalRoot(graph).getXdiEntity(this.dataSubject.getXri(), true).getXdiEntityCollection(XDI3Segment.create("[#receipt]"), true);
+		XdiEntityMember myReceiptXdiEntityMember = myReceiptsXdiEntityCollection.setXdiMemberUnordered(null);
+
 		XdiInnerRoot xdiInnerRoot = XdiLocalRoot.findLocalRoot(graph).getInnerRoot(this.dataSubject.getXri(), this.dataController.getCloudNumber().getXri(), true);
 		XdiEntityCollection receiptsXdiEntityCollection = xdiInnerRoot.getXdiEntityCollection(XDI3Segment.create("[#receipt]"), true);
-		XdiEntityMember receiptXdiEntityMember = receiptsXdiEntityCollection.setXdiMemberUnordered(null);
+		XdiEntityMember receiptXdiEntityMember = receiptsXdiEntityCollection.setXdiMemberUnordered(myReceiptXdiEntityMember.getArcXri());
+
+		Equivalence.setReferenceContextNode(myReceiptXdiEntityMember.getContextNode(), receiptXdiEntityMember.getContextNode());
 
 		if (this.locationDigital != null)
 			receiptXdiEntityMember.getXdiAttributeSingleton(XDI3Segment.create("<#location><#digital>"), true).getXdiValue(true).setLiteralBoolean(this.locationDigital);

@@ -2,6 +2,7 @@
 
 <head>
 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="css/style.css" TYPE="text/css" MEDIA="screen" />
 <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
 <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
@@ -10,12 +11,6 @@
 <script type="text/javascript" src="xdi.js"></script>
 
 <script type="text/javascript">
-
-function issueConsentReceipt() {
-	$.get("IssueConsentReceipt?dataSubject=[=]!:uuid:1111", function(data) {
-		$("#consentReceipt").text(data);
-	});
-}
 
 function findCloud() {
 	xdi.discovery(
@@ -30,14 +25,22 @@ function findCloud() {
 	);
 }
 
-function storeConsentReceipt() {
+function issueConsentReceipt() {
+	$.get("IssueConsentReceipt?dataSubject=" + $("#cloudNumber").text(), function(data) {
+		$("#consentReceipt").text(data);
+	});
+}
+
+var message;
+
+function prepareMessage() {
 
 	var graph = xdi.graph();
 	graph.deserializeXDIDISPLAY($("#consentReceipt").text());
 
 	var statements = graph.statements();
 
-	var message = xdi.message($("#cloudNumber").text());
+	message = xdi.message($("#cloudNumber").text());
 	message.toAddress("(" + $("#cloudNumber").text() + ")");
 	message.linkContract("(" + $("#cloudNumber").text() + "/" + $("#cloudNumber").text() + ")$do");
 	message.secretToken($("#secretToken").val());
@@ -45,20 +48,20 @@ function storeConsentReceipt() {
 	for (i in statements) message.operation("$set", statements[i]);
 
 	$("#message").text(message.messageEnvelope().graph().serializeXDIDISPLAY());
+}
 
-/*	message.send(
+function sendMessage() {
 
-		endpoint,
+	message.send(
+
+		$("#xdiEndpoint").text(),
 		function(response) {
-			var statements = response.statements();
-			$("#clientresult").html("");
-			$("#clientresult").append("<p class='segment'>STATEMENTS: " + statements.length + "</p>");
-			for (var i in statements) $("#clientresult").append(_.escape(statements[i].string()) + "<br>");
+			alert("Success! The consent receipt has been stored in your personal cloud.");
 		},
 		function(errorText) {
 			alert(errorText);
 		}
-	);*/
+	);
 }
 
 </script>
@@ -74,11 +77,6 @@ function storeConsentReceipt() {
 
 <h2>Step 1:</h2>
 
-<a href="javascript:void(0);" onclick="issueConsentReceipt();">Issue Consent Receipt</a>
-<textarea id="consentReceipt" style="width:90%" rows="3"></textarea>
-
-<h2>Step 2:</h2>
-
 <p>Type your Respect Network Cloud Name:</p>
 <input type="text" id="cloudName" placeholder="=yourname">
 <button onclick="findCloud();">Find my Personal Cloud</button>
@@ -86,12 +84,22 @@ function storeConsentReceipt() {
 <p><b>Your Cloud Number:</b> <span id="cloudNumber"></span></p>
 <p><b>Your Personal Cloud:</b> <span id="xdiEndpoint"></span></p>
 
+<h2>Step 2:</h2>
+
+<a href="javascript:void(0);" onclick="issueConsentReceipt();">Issue Consent Receipt</a>
+<textarea id="consentReceipt" style="width:90%" rows="3"></textarea>
+
 <h2>Step 3:</h2>
 
-<p>Store Consent Receipt in your Personal Cloud:</p>
+<p>Prepare XDI message to your Personal Cloud using your Secret Token (password):</p>
 <input type="text" id="secretToken" placeholder="your secret token">
-<button onclick="storeConsentReceipt();">Store Consent Receipt</button>
+<button onclick="prepareMessage();">Prepare XDI message</button>
 <textarea id="message" style="width:90%" rows="3"></textarea>
+
+<h2>Step 4:</h2>
+
+<p>Send XDI message to your Personal Cloud (may take a long time!):</p>
+<button onclick="sendMessage();">Send XDI message</button>
 
 </pre>
 
